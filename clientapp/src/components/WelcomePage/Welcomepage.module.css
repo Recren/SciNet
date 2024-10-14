@@ -1,0 +1,36 @@
+.container {
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #379193;
+}
+h1,
+h2 {
+  margin: 0;
+  color: #e4a469;
+}
+
+h1 {
+  font-size: 72px;
+}
+h2 {
+  font-size: 40px;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 30px;
+  color: #e4a469;
+  background-color: #27696a;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: 0.2s;
+  margin: 20px;
+  margin-bottom: 30px;
+}
+.btn:hover {
+  transform: scale(1.1);
+}

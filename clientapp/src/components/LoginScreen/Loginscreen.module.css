@@ -1,0 +1,17 @@
+.container {
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #379193;
+}
+.header1 {
+  margin: 0;
+  color: #e4a469;
+}
+
+.header1 {
+  font-size: 72px;
+}

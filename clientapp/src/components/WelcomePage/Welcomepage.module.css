@@ -7,16 +7,16 @@
   align-items: center;
   background-color: #379193;
 }
-h1,
-h2 {
+.header1,
+.header2 {
   margin: 0;
   color: #e4a469;
 }
 
-h1 {
+.header1 {
   font-size: 72px;
 }
-h2 {
+.header2 {
   font-size: 40px;
 }
 .btn {

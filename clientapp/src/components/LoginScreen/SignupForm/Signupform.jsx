@@ -9,9 +9,23 @@ const Signupform = () => {
     password: "",
   });
 
-  const handleSubmit = (event) => {
+  //Send signup inform to the Server
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(`The signup data is: ${JSON.stringify(signupData)}`);
+    try {
+      const response = await fetch("http://localhost:5000/login/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      });
+
+      const serverResponse = await response.json();
+      console.log(serverResponse);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   };
 
   return (
@@ -43,14 +57,14 @@ const Signupform = () => {
           />
         </div>
         <div className={styles.inputFormDiv}>
-          <label className={styles.label} for="emailaddress">
+          <label className={styles.label} for="email">
             Email address:
           </label>
           <input
             className={styles.input}
             type="text"
             onChange={(e) =>
-              setSignupData({ ...signupData, emailaddress: e.target.value })
+              setSignupData({ ...signupData, email: e.target.value })
             }
           />
         </div>

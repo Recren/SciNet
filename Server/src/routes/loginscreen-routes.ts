@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
     //Throw error
     if (err instanceof Error) {
       console.error(err.message);
-      res.status(500).send(err.message); //Send the error message in the response
+      res.status(500).send({ message: err.message }); //Send the error message in the response
     } else {
       console.error("An unknown error occurred", err);
       res.status(500).send("Server Error");

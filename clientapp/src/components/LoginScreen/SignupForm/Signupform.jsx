@@ -9,22 +9,77 @@ const Signupform = () => {
     password: "",
   });
 
-  //Send signup inform to the Server
+  const [listOfErrors, setListOfErrors] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    username: "",
+    password: "",
+  });
+
+  //Validation function to ensure inputs are acceptable
+  const validate = () => {
+    const errors = {};
+    if (!signupData.firstname) {
+      errors["firstname"] = "First name required";
+    }
+    if (!signupData.lastname) {
+      errors["lastname"] = "Last name required";
+    }
+    if (!signupData.email) {
+      errors["email"] = "Email is required";
+    }
+    if (!signupData.username) {
+      errors["username"] = "Please create a username";
+    }
+    if (!signupData.password) {
+      errors["password"] = "Please create a password";
+    }
+    return errors;
+  };
+
+  //Send signup information to the Server
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch("http://localhost:5000/login/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(signupData),
-      });
+    //Validate user input
+    const errorsList = validate();
+    //If the size of the object is zero, we have no errors in input
+    if (Object.keys(errorsList).length == 0) {
+      try {
+        const response = await fetch("http://localhost:5000/login/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(signupData),
+        });
 
-      const serverResponse = await response.json();
-      console.log(serverResponse);
-    } catch (error) {
-      console.error("Error: ", error);
+        //If we get an error response like 400 or 500, throw an error
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message);
+        }
+
+        const serverResponse = await response.json();
+        console.log(serverResponse);
+      } catch (error) {
+        const errorMessage = error.message;
+
+        const errors = {};
+        if (errorMessage.includes("duplicate key")) {
+          if (errorMessage.includes("users_email_key")) {
+            errors["email"] = "Email has already been registered";
+          } else if (errorMessage.includes("users_username_key")) {
+            errors["username"] = "Username has already been taken";
+          }
+          setListOfErrors(errors);
+        }
+        //Check the error and render to user (likely dupe key)
+      }
+    } else {
+      //If we have errors in input, render the errors to the screen
+      console.log("Errors detected");
+      setListOfErrors(errorsList);
     }
   };
 
@@ -43,6 +98,7 @@ const Signupform = () => {
               setSignupData({ ...signupData, firstname: e.target.value })
             }
           />
+          {listOfErrors.firstname && <span>{listOfErrors.firstname}</span>}
         </div>
         <div className={styles.inputFormDiv}>
           <label className={styles.label} for="lastname">
@@ -55,6 +111,7 @@ const Signupform = () => {
               setSignupData({ ...signupData, lastname: e.target.value })
             }
           />
+          {listOfErrors.lastname && <span>{listOfErrors.lastname}</span>}
         </div>
         <div className={styles.inputFormDiv}>
           <label className={styles.label} for="email">
@@ -62,11 +119,12 @@ const Signupform = () => {
           </label>
           <input
             className={styles.input}
-            type="text"
+            type="email"
             onChange={(e) =>
               setSignupData({ ...signupData, email: e.target.value })
             }
           />
+          {listOfErrors.email && <span>{listOfErrors.email}</span>}
         </div>
         <div className={styles.inputFormDiv}>
           <label className={styles.label} for="username">
@@ -79,6 +137,7 @@ const Signupform = () => {
               setSignupData({ ...signupData, username: e.target.value })
             }
           />
+          {listOfErrors.username && <span>{listOfErrors.username}</span>}
         </div>
         <div className={styles.inputFormDiv}>
           <label className={styles.label} for="password">
@@ -86,11 +145,12 @@ const Signupform = () => {
           </label>
           <input
             className={styles.input}
-            type="text"
+            type="password"
             onChange={(e) =>
               setSignupData({ ...signupData, password: e.target.value })
             }
           />
+          {listOfErrors.password && <span>{listOfErrors.password}</span>}
         </div>
         <button className={styles.btn} type="submit">
           Sign up

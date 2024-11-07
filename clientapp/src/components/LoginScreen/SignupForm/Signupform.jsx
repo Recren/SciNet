@@ -72,9 +72,11 @@ const Signupform = () => {
           } else if (errorMessage.includes("users_username_key")) {
             errors["username"] = "Username has already been taken";
           }
+          //Check the error and render to user (likely dupe key)
           setListOfErrors(errors);
+        } else {
+          console.log("Server error");
         }
-        //Check the error and render to user (likely dupe key)
       }
     } else {
       //If we have errors in input, render the errors to the screen
